@@ -1,0 +1,47 @@
+<html>
+<head>
+<script>
+//show developer tools
+//fin.System.showDeveloperTools(fin.me);
+
+const IAB_TOPIC = 'IAB_ECHO';
+const CHANNEL_NAME = 'SIMPLE_GUI_CHANNEL';
+const CHANNEL_ACTION = 'CHANNEL_ECHO';
+
+//echo using IAB
+fin.InterApplicationBus.subscribe({uuid: '*'}, IAB_TOPIC, (message, senderIdentity) =>{
+	console.log('IAB senderIdentity', senderIdentity);
+	console.log('IAB message', message);
+	var fromElem = document.querySelector('#msgFrom');
+	var timeElem = document.querySelector('#msgTime');
+	var msgElem = document.querySelector('#msg');
+	fromElem.innerText = 'IAB';
+	timeElem.innerText = new Date();
+	msgElem.innerText = message;
+	fin.InterApplicationBus.send(senderIdentity, IAB_TOPIC, message);
+});
+//echo using Channel API
+fin.InterApplicationBus.Channel.create(CHANNEL_NAME).then(channelProvider=>{
+	channelProvider.register(CHANNEL_ACTION, (payload, senderIdentity) => {
+		console.log('Channel senderIdentity', senderIdentity);
+		console.log('Channel payload', payload);
+		var fromElem = document.querySelector('#msgFrom');
+		var timeElem = document.querySelector('#msgTime');
+		var msgElem = document.querySelector('#msg');
+		fromElem.innerText = 'Channel API';
+		timeElem.innerText = new Date();
+		msgElem.innerText = payload;
+		return payload;
+	});
+});
+
+</script>
+</head>
+<body>
+<h4>JavaScript Application.</h4>
+<hr/>
+<span>Received message from: </span><span id="msgFrom"></span><br/>
+<span>Received message at: </span><span id="msgTime"></span><br/>
+<span>Received message: </span><span id="msg"></span><br/>
+</body>
+</html>
