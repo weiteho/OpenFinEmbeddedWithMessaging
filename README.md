@@ -1,4 +1,4 @@
-# OpenFin Embedded in Java Swing with IAB/Channel API Messaging Demo
+# OpenFin Embedded in Java Swing with IAB/Channel API
 
 ### How to build
 
